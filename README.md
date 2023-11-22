@@ -6,7 +6,7 @@ CacheManager v2 introduced some breaking changes when configuring a custom Cache
 # flutter_cache_manager
 
 [![pub package](https://img.shields.io/pub/v/flutter_cache_manager.svg)](https://pub.dartlang.org/packages/flutter_cache_manager)
-[![Build Status](https://app.bitrise.io/app/b3454de795b5c22a/status.svg?token=vEfW1ztZ-tkoUx64yXeklg&branch=master)](https://app.bitrise.io/app/b3454de795b5c22a)
+[![build](https://github.com/Baseflow/flutter_cache_manager/actions/workflows/build.yaml/badge.svg)](https://github.com/Baseflow/flutter_cache_manager/actions/workflows/build.yaml)
 [![codecov](https://codecov.io/gh/Baseflow/flutter_cache_manager/branch/master/graph/badge.svg)](https://codecov.io/gh/Baseflow/flutter_cache_manager)
 
 A CacheManager to download and cache files in the cache directory of the app. Various settings on how long to keep a file can be changed.
@@ -38,6 +38,23 @@ The easiest way to get a single file is call `.getSingleFile`.
 `removeFile` removes a file from the cache. 
 
 `emptyCache` removes all files from the cache. 
+
+### ImageCacheManager
+If you use the ImageCacheManager mixin on the CacheManager (which is already done on the DefaultCacheManager) you 
+get the following `getImageFile` method for free:
+
+```
+Stream<FileResponse> getImageFile(String url, {
+    String key,
+    Map<String, String> headers,
+    bool withProgress,
+    int maxHeight,  // This is extra
+    int maxWidth,   // This is extra as well
+})
+```
+The image from the url is resized within the specifications, and the resized images is stored in the cache. It 
+always tries to keep the existing aspect ratios. The original image is also cached and used to resize the image if 
+you call this method with other height/width parameters.
 
 ## Other implementations
 When your files are stored on Firebase Storage you can use [flutter_cache_manager_firebase](https://pub.dev/packages/flutter_cache_manager_firebase).
@@ -99,8 +116,10 @@ the stale period.
 
 ## Breaking changes in v2
 - There is no longer a need to extend on BaseCacheManager, you can directly call the constructor. The BaseCacheManager
- is therefore renamed to CacheManager as it is not really just a 'base' anymore.
+ is now only an interface. CacheManager is the implementation you can use directly. 
 
 - The constructor now expects a Config object with some settings you were used to, but some are slightly different.
 For example the system where you want to store your files is not just a dictionary anymore, but a FileSystem. That way
 you have more freedom on where to store your files.
+
+-  See the example in [Customize](#customize).
