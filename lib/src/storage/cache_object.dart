@@ -28,12 +28,13 @@ class CacheObject {
     this.type,
     this.encoding,
     this.touched,
-  }) : key = key ?? url;
+  }) : key = key ?? getUrlKey(url); // url;
 
   CacheObject.fromMap(Map<String, dynamic> map)
       : id = map[columnId] as int,
         url = map[columnUrl] as String,
-        key = map[columnKey] as String? ?? map[columnUrl] as String,
+        // key = map[columnKey] as String? ?? map[columnUrl] as String,
+        key = map[columnKey] as String? ?? getUrlKey(map[columnUrl]) as String,
         relativePath = map[columnPath] as String,
         validTill =
             DateTime.fromMillisecondsSinceEpoch(map[columnValidTill] as int),
@@ -89,7 +90,13 @@ class CacheObject {
     };
     return map;
   }
-
+  static String getUrlKey(String url) {
+    var u = Uri.parse(url);
+    // u.scheme
+    var key = url.replaceFirst(u.scheme, '');
+    return key;
+    return "${u.host}/${u.path}?${u.query}";
+  }
   static List<CacheObject> fromMapList(List<Map<String, dynamic>> list) {
     return list.map((map) => CacheObject.fromMap(map)).toList();
   }
