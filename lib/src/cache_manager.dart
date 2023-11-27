@@ -60,6 +60,14 @@ class CacheManager implements BaseCacheManager {
   /// Get the underlying web helper
   WebHelper get webHelper => _webHelper;
 
+  String getUrlKey(String url) {
+    var u = Uri.parse(url);
+    // u.scheme
+    var key = url.replaceFirst(u.scheme, '');
+    return key;
+    return "${u.host}/${u.path}?${u.query}";
+  }
+
   /// Get the file from the cache and/or online, depending on availability and age.
   /// Downloaded form [url], [headers] can be used for example for authentication.
   /// When a file is cached and up to date it is return directly, when the cached
@@ -71,7 +79,7 @@ class CacheManager implements BaseCacheManager {
     String? key,
     Map<String, String>? headers,
   }) async {
-    key ??= url;
+    key ??= getUrlKey(url);
     final cacheFile = await getFileFromCache(key);
     if (cacheFile != null && cacheFile.validTill.isAfter(DateTime.now())) {
       return cacheFile.file;
@@ -108,7 +116,7 @@ class CacheManager implements BaseCacheManager {
   @override
   Stream<FileResponse> getFileStream(String url,
       {String? key, Map<String, String>? headers, bool withProgress = false}) {
-    key ??= url;
+    key ??= getUrlKey(url);
     final streamController = StreamController<FileResponse>();
     _pushFileToStream(streamController, url, key, headers, withProgress);
     return streamController.stream;
@@ -121,7 +129,7 @@ class CacheManager implements BaseCacheManager {
     Map<String, String>? headers,
     bool withProgress,
   ) async {
-    key ??= url;
+    key ??= getUrlKey(url);
     FileInfo? cacheFile;
     try {
       cacheFile = await getFileFromCache(key);
@@ -163,7 +171,7 @@ class CacheManager implements BaseCacheManager {
       {String? key,
       Map<String, String>? authHeaders,
       bool force = false}) async {
-    key ??= url;
+    key ??= getUrlKey(url);
     final fileResponse = await _webHelper
         .downloadFile(
           url,
@@ -202,7 +210,7 @@ class CacheManager implements BaseCacheManager {
     Duration maxAge = const Duration(days: 30),
     String fileExtension = 'file',
   }) async {
-    key ??= url;
+    key ??= getUrlKey(url);
     var cacheObject = await _store.retrieveCacheData(key);
     cacheObject ??= CacheObject(
       url,
@@ -238,7 +246,7 @@ class CacheManager implements BaseCacheManager {
     Duration maxAge = const Duration(days: 30),
     String fileExtension = 'file',
   }) async {
-    key ??= url;
+    key ??= getUrlKey(url);
     var cacheObject = await _store.retrieveCacheData(key);
     cacheObject ??= CacheObject(url,
         key: key,
