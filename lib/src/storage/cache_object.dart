@@ -83,6 +83,8 @@ class CacheObject {
           (setTouchedToNow ? clock.now() : touched)?.millisecondsSinceEpoch ??
               0,
       columnLength: length,
+      columnType: type,
+      columnEncoding: encoding,
       if (id != null) columnId: id,
     };
     return map;
