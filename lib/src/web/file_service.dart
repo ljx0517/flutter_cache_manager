@@ -58,6 +58,10 @@ abstract class FileServiceResponse {
   /// [eTag] is used when asking to update the cache
   String? get eTag;
 
+  String? get type;
+
+  String? get encoding;
+
   /// Used to save the file on the storage, includes a dot. For example '.jpeg'
   String get fileExtension;
 }
@@ -83,8 +87,10 @@ class HttpGetResponse implements FileServiceResponse {
   @override
   int? get contentLength => _response.contentLength;
 
+  @override
   String? get type => _response.headers['content-type'];
 
+  @override
   String? get encoding => _response.headers['content-encoding'];
 
   @override
