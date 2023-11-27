@@ -88,10 +88,10 @@ class HttpGetResponse implements FileServiceResponse {
   int? get contentLength => _response.contentLength;
 
   @override
-  String? get type => _response.headers['content-type'];
+  String? get type => _response.headers['content-type'] ?? '';
 
   @override
-  String? get encoding => _response.headers['content-encoding'];
+  String? get encoding => _response.headers['content-encoding'] ?? '';
 
   @override
   DateTime get validTill {
