@@ -13,6 +13,8 @@ class CacheObject {
   static const columnETag = 'eTag';
   static const columnValidTill = 'validTill';
   static const columnTouched = 'touched';
+  static const columnType = 'type';
+  static const columnEncoding = 'encoding';
   static const columnLength = 'length';
 
   CacheObject(
@@ -23,6 +25,8 @@ class CacheObject {
     this.eTag,
     this.id,
     this.length,
+    this.type,
+    this.encoding,
     this.touched,
   }) : key = key ?? url;
 
@@ -35,6 +39,8 @@ class CacheObject {
             DateTime.fromMillisecondsSinceEpoch(map[columnValidTill] as int),
         eTag = map[columnETag] as String?,
         length = map[columnLength] as int?,
+        type = map[columnType] as String?,
+        encoding = map[columnEncoding] as String?,
         touched =
             DateTime.fromMillisecondsSinceEpoch(map[columnTouched] as int);
 
@@ -60,6 +66,8 @@ class CacheObject {
 
   /// The length of the cached file
   final int? length;
+  final String? type;
+  final String? encoding;
 
   /// When the file is last used
   final DateTime? touched;
@@ -91,6 +99,8 @@ class CacheObject {
     DateTime? validTill,
     String? eTag,
     int? length,
+    String? type,
+    String? encoding,
   }) {
     return CacheObject(
       url ?? this.url,
@@ -100,6 +110,8 @@ class CacheObject {
       validTill: validTill ?? this.validTill,
       eTag: eTag ?? this.eTag,
       length: length ?? this.length,
+      type: type ?? this.type,
+      encoding: encoding ?? this.encoding,
       touched: touched,
     );
   }
