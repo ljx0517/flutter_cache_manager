@@ -174,8 +174,8 @@ class WebHelper {
       validTill: response.validTill,
       eTag: response.eTag,
       length: response.contentLength ,
-      type:response.contentLength,
-      encoding: response.contentLength,
+      type:response.type,
+      encoding: response.encoding,
     );
   }
 
