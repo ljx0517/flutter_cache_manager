@@ -173,6 +173,9 @@ class WebHelper {
       relativePath: filePath,
       validTill: response.validTill,
       eTag: response.eTag,
+      length: response.contentLength ,
+      type:response.contentLength,
+      encoding: response.contentLength,
     );
   }
 

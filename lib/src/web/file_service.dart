@@ -83,6 +83,10 @@ class HttpGetResponse implements FileServiceResponse {
   @override
   int? get contentLength => _response.contentLength;
 
+  String? get type => _response.headers['content-type'];
+
+  String? get encoding => _response.headers['content-encoding'];
+
   @override
   DateTime get validTill {
     // Without a cache-control header we keep the file for a week
