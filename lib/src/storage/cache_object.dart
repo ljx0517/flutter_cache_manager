@@ -93,9 +93,9 @@ class CacheObject {
   static String getUrlKey(String url) {
     var u = Uri.parse(url);
     // u.scheme
-    var key = url.replaceFirst(u.scheme, '');
+    var key = url.replaceFirst('${u.scheme}://', '');
     return key;
-    return "${u.host}/${u.path}?${u.query}";
+    return "${u.host}/${u.path}${u.query != null ? '?${u.query}' : ''}";
   }
   static List<CacheObject> fromMapList(List<Map<String, dynamic>> list) {
     return list.map((map) => CacheObject.fromMap(map)).toList();
