@@ -24,7 +24,7 @@ class IsarCacheObjectProvider extends CacheInfoRepository
   /// If the path is provider it should end with '{databaseName}.db',
   /// for example: /data/user/0/com.example.example/databases/imageCache.db
   IsarCacheObjectProvider({String? path, required this.databaseName}) : _path = path;
-
+  String? get path => _path;
   @override
   Future<bool> open() async {
     if (!shouldOpenOnNewConnection()) {
