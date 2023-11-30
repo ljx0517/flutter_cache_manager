@@ -63,6 +63,7 @@ class CacheStore {
 
   Future<CacheObject?> retrieveCacheData(String key,
       {bool ignoreMemCache = false}) async {
+    // var key = CacheObject.getUrlKey(url);
     if (!ignoreMemCache && _memCache.containsKey(key)) {
       if (await _fileExists(_memCache[key])) {
         return _memCache[key];

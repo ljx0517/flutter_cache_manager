@@ -1,11 +1,10 @@
 import 'package:clock/clock.dart';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
-import 'package:isar/isar.dart';
 
-part 'cache_object.g.dart';
+///Flutter Cache Manager
+///Copyright (c) 2019 Rene Floor
+///Released under MIT License.
 
-@collection
+///Cache information of one file
 class CacheObject {
   static const columnId = '_id';
   static const columnUrl = 'url';
@@ -19,83 +18,60 @@ class CacheObject {
   static const columnLength = 'length';
 
   CacheObject(
-      this.url, {
-        // String? key,
-        required this.key,
-        required this.relativePath,
-        required this.validTill,
-        this.eTag,
-        // this.id,
-        this.length,
-        this.type,
-        this.encoding,
-        this.touched,
-      }) {
-    // key = key ?? getUrlKey(url);
-  }
-  // CacheObject(
-  //     this.url, {
-  //       String? key,
-  //       required this.relativePath,
-  //       required this.validTill,
-  //       this.eTag,
-  //       this.id,
-  //       this.length,
-  //       this.type,
-  //       this.encoding,
-  //       this.touched,
-  //     }) : key = key ?? getUrlKey(url); // url;
+    this.url, {
+    String? key,
+    required this.relativePath,
+    required this.validTill,
+    this.eTag,
+    this.id,
+    this.length,
+    this.type,
+    this.encoding,
+    this.touched,
+  }) : key = key ?? getUrlKey(url); // url;
 
   CacheObject.fromMap(Map<String, dynamic> map)
-      :
-  // id = map[columnId] as Id,
+      : id = map[columnId] as int,
         url = map[columnUrl] as String,
-  // key = map[columnKey] as String? ?? map[columnUrl] as String,
+        // key = map[columnKey] as String? ?? map[columnUrl] as String,
         key = map[columnKey] as String? ?? getUrlKey(map[columnUrl]) as String,
         relativePath = map[columnPath] as String,
         validTill =
-        DateTime.fromMillisecondsSinceEpoch(map[columnValidTill] as int),
+            DateTime.fromMillisecondsSinceEpoch(map[columnValidTill] as int),
         eTag = map[columnETag] as String?,
         length = map[columnLength] as int?,
         type = map[columnType] as String?,
         encoding = map[columnEncoding] as String?,
         touched =
-        DateTime.fromMillisecondsSinceEpoch(map[columnTouched] as int);
+            DateTime.fromMillisecondsSinceEpoch(map[columnTouched] as int);
 
   /// Internal ID used to represent this cache object
-  @Name("id")
-  Id? id; //  = Isar.autoIncrement;
+  final int? id;
 
   /// The URL that was used to download the file
-  @Name("url")
-  String url;
+  final String url;
 
   /// The key used to identify the object in the cache.
   ///
   /// This key is optional and will default to [url] if not specified
-  @Name("key")
-  @Index(unique: true, caseSensitive: false)
   final String key;
 
   /// Where the cached file is stored
-  @Name("path")
-  String relativePath;
+  final String relativePath;
 
   /// When this cached item becomes invalid
-  @Name("validTill")
-  DateTime validTill;
+  final DateTime validTill;
 
   /// eTag provided by the server for cache expiry
-  @Name("eTag")
-  String? eTag;
+  final String? eTag;
 
   /// The length of the cached file
-  int? length;
-  String? type;
-  String? encoding;
+  final int? length;
+  final String? type;
+  final String? encoding;
 
   /// When the file is last used
-  DateTime? touched;
+  final DateTime? touched;
 
   Map<String, dynamic> toMap({bool setTouchedToNow = true}) {
     final map = <String, dynamic>{
@@ -105,12 +81,12 @@ class CacheObject {
       columnETag: eTag,
       columnValidTill: validTill.millisecondsSinceEpoch,
       columnTouched:
-      (setTouchedToNow ? clock.now() : touched)?.millisecondsSinceEpoch ??
-          0,
+          (setTouchedToNow ? clock.now() : touched)?.millisecondsSinceEpoch ??
+              0,
       columnLength: length,
       columnType: type,
       columnEncoding: encoding,
-      // if (id != null) columnId: id,
+      if (id != null) columnId: id,
     };
     return map;
   }
@@ -119,8 +95,7 @@ class CacheObject {
     // u.scheme
     var key = url.replaceFirst('${u.scheme}://', '');
     // var key = "${u.host}/${u.path}${u.query != '' ? '?${u.query}' : ''}";
-    // return key;
-    return md5.convert(utf8.encode(key)).toString();
+    return key;
 
   }
   static List<CacheObject> fromMapList(List<Map<String, dynamic>> list) {
@@ -129,7 +104,7 @@ class CacheObject {
 
   CacheObject copyWith({
     String? url,
-    Id? id,
+    int? id,
     String? relativePath,
     DateTime? validTill,
     String? eTag,
@@ -139,7 +114,7 @@ class CacheObject {
   }) {
     return CacheObject(
       url ?? this.url,
-      // id: id ?? this.id,
+      id: id ?? this.id,
       key: key,
       relativePath: relativePath ?? this.relativePath,
       validTill: validTill ?? this.validTill,

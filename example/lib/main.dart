@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     BaseflowPluginExample(
       pluginName: 'Flutter Cache Manager',
@@ -31,12 +33,27 @@ class CacheManagerPage extends StatefulWidget {
   CacheManagerPageState createState() => CacheManagerPageState();
 }
 
+final String isar_key = 'test_isar.db';
 class CacheManagerPageState extends State<CacheManagerPage> {
   Stream<FileResponse>? fileStream;
 
+  static CacheManager cm = CacheManager(
+    Config(
+      isar_key,
+      stalePeriod: const Duration(days: 7),
+      maxNrOfCacheObjects: 20,
+      // repo: JsonCacheInfoRepository(databaseName: isar_key),
+      repo: IsarCacheObjectProvider(databaseName: isar_key),
+      // repo: CacheObjectProvider(databaseName: isar_key),
+      // fileSystem: IOFileSystem(key),
+      // fileService: DioDownloaderManager(),
+    ),
+  );
+
   void _downloadFile() {
     setState(() {
-      fileStream = DefaultCacheManager().getFileStream(url, withProgress: true);
+      // fileStream = DefaultCacheManager().getFileStream(url, withProgress: true);
+      fileStream = cm.getFileStream(url, withProgress: true);
     });
   }
 
@@ -61,14 +78,14 @@ class CacheManagerPageState extends State<CacheManagerPage> {
   }
 
   void _clearCache() {
-    DefaultCacheManager().emptyCache();
+    cm.emptyCache();
     setState(() {
       fileStream = null;
     });
   }
 
   void _removeFile() {
-    DefaultCacheManager().removeFile(url).then((value) {
+    cm.removeFile(url).then((value) {
       if (kDebugMode) {
         print('File removed');
       }

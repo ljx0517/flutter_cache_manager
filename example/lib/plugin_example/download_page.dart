@@ -34,6 +34,9 @@ class DownloadPage extends StatelessWidget {
             subtitle: Text(snapshot.error.toString()),
           );
         } else if (loading) {
+          if (snapshot.data != null) {
+            print('DownloadProgress: ${ (snapshot.data as DownloadProgress)?.progress}');
+          }
           body = p_i.ProgressIndicator(
             progress: snapshot.data as DownloadProgress?,
           );

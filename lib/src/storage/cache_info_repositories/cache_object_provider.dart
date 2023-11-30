@@ -25,6 +25,7 @@ class CacheObjectProvider extends CacheInfoRepository
     if (!shouldOpenOnNewConnection()) {
       return openCompleter!.future;
     }
+    // databaseFactory = databaseFactoryFfi;
     final path = await _getPath();
     await File(path).parent.create(recursive: true);
     db = await openDatabase(path, version: 3,
