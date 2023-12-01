@@ -4,6 +4,7 @@ import 'package:flutter_cache_manager/src/storage/file_system/file_system.dart';
 
 class MemoryCacheSystem implements FileSystem {
   final directory = MemoryFileSystem().systemTempDirectory.createTemp('cache');
+  get fileDir => directory;
 
   @override
   Future<File> createFile(String name) async {
