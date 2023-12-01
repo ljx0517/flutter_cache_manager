@@ -9,7 +9,7 @@ class IOFileSystem implements FileSystem {
   final String _cacheKey;
 
   IOFileSystem(this._cacheKey) : _fileDir = createDirectory(_cacheKey);
-
+  get fileDir => _fileDir;
   static Future<Directory> createDirectory(String key) async {
     final baseDir = await getTemporaryDirectory();
     final path = p.join(baseDir.path, key);

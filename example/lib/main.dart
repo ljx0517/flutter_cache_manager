@@ -45,7 +45,7 @@ class CacheManagerPageState extends State<CacheManagerPage> {
       // repo: JsonCacheInfoRepository(databaseName: isar_key),
       repo: IsarCacheObjectProvider(databaseName: isar_key),
       // repo: CacheObjectProvider(databaseName: isar_key),
-      // fileSystem: IOFileSystem(key),
+      fileSystem: IOFileSystem(isar_key),
       // fileService: DioDownloaderManager(),
     ),
   );

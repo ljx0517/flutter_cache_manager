@@ -187,6 +187,9 @@ class IsarCacheObjectProvider extends CacheInfoRepository
 
   @override
   Future<List<CacheObject>> getObjectsOverCapacity(int capacity) async {
+    if (capacity < 0) {
+      return [];
+    }
     var t = DateTime.now().subtract(const Duration(days: 1));
     var all = db.cacheObjects.filter().touchedLessThan(t).sortByTouchedDesc().offset(capacity).limit(100).findAll();
     return all;
@@ -206,7 +209,9 @@ class IsarCacheObjectProvider extends CacheInfoRepository
 
   @override
   Future<List<CacheObject>> getOldObjects(Duration maxAge) async {
-
+    if (maxAge == Duration.zero) {
+      return [];
+    }
     var t = DateTime.now().subtract(maxAge);
     var all = db.cacheObjects.filter().touchedLessThan(t).sortByTouchedDesc().limit(100).findAll();
     return all;

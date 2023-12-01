@@ -35,7 +35,7 @@ class CacheManager implements BaseCacheManager {
         _store = CacheStore(config) {
     _webHelper = WebHelper(_store, config.fileService);
   }
-
+ get fileSystem => _store.fileSystem;
   @visibleForTesting
   CacheManager.custom(
     Config config, {
